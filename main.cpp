@@ -66,8 +66,8 @@ T* createSingleArray(int n, float ratio) {
             float c_ratio = static_cast<float>(i) / static_cast<float>(n);
             // jezeli ratio=0, wszystkie wartosci beda losowe
             // jezeli ratio=1, wszystkie wartosci beda posortowane
-            if (c_ratio > ratio) {
-                arr[i] = rand() % 11;
+            if (c_ratio >= ratio) {
+                arr[i] = rand() % 101;
             } else {
                 arr[i] = i;
             }
@@ -77,7 +77,7 @@ T* createSingleArray(int n, float ratio) {
 }
 
 template <class T>
-T* copySingleArray(T* origin, int n) {
+T* copySingleArray(T origin[], int n) {
     T *dest = new T [n];
     for (int i=0; i<n; i++) {
         dest[i] = origin[i];
@@ -85,10 +85,25 @@ T* copySingleArray(T* origin, int n) {
     return dest;
 }
 
+template <class T>
+bool checkIfSorted(T* arr, int n) {
+    for (int i=0; i < n - 1; i++) {
+        if (arr[i] > arr[ i + 1 ]) {
+            std::cout<<"Bad: ";
+            for (int i = 0; i < n; i++) {
+                std::cout<<arr[i]<<", ";
+            }
+            std::cout<<arr[i]<<"-"<<arr[i+1]<<std::endl;
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
     std::ofstream file;
 
-    file.open("../data_test.txt", std::ios::out | std::ios::trunc);
+    file.open("./data_new.txt", std::ios::out | std::ios::trunc);
 
     if (!file.is_open()) {
         std::cout<<"File could not be opened"<<std::endl;
@@ -112,46 +127,54 @@ int main() {
 
     // data
     // sizes
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 9; i++) {
         // ratios
         for (int j = 0; j < 8; j++) {
-            auto time1 = Clock::now();
-            //int** arrays = createArray<int>(5, sizes[i], ratios[j]);
-            // int** arr_qs = createArray<int>(100, sizes[i], ratios[j]);
-            // int** arr_ms = copyArray<int>(arr_qs, 100, sizes[i]);
-            // int** arr_is = copyArray<int>(arr_qs, 100, sizes[i]);
-            auto time2 = Clock::now();
-            long timediff = std::chrono::duration_cast<std::chrono::milliseconds>(time2-time1).count();
-            std::cout<<"Time of creating [size=" << sizes[i] << ", ratio=" << ratios[j] << "] and copying arrays: "<<timediff<<"ms"<<std::endl;
+            int size = sizes[i];
+            float ratio = ratios[j];
+            std::cout<<"Sorting array [size=" << size << ", ratio=" << ratio << "]"<<std::endl;
 
-            for (int k = 0; k < 100; k++) {
+            for (int k = 0; k < 2; k++) {
 
-                file << k + 1 << "," << sizes[i] << "," << ratios[j] << ",";
+                file << k + 1 << "," << size << "," << ratio << ",";
 
-                //int* arr_qs = copySingleArray<int>(arrays[k], sizes[i]);
-                int *arr_qs = createSingleArray<int>(sizes[i], ratios[j]);
+                int *array = createSingleArray<int>(size, ratio);
+                int* arr_qs = copySingleArray<int>(array, size);
                 auto t1 = Clock::now();
-                quicksort.quicksort(arr_qs, 0, sizes[i]-1);
+                quicksort.quicksort(arr_qs, 0, size-1);
                 auto t2 = Clock::now();
                 long time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 file << time_ms << ",";
+                if (!checkIfSorted<int>(arr_qs, size)) {
+                    std::cout<<"Quicksort Bad!!\n";
+                    return 3;
+                }
+                delete[] arr_qs;
 
-                int* arr_ms = copySingleArray<int>(arr_qs, sizes[i]);
+                int* arr_ms = copySingleArray<int>(array, size);
                 t1 = Clock::now();
-                mergesort.mergesort(arr_ms, 0, sizes[i]-1);
+                mergesort.mergesort(arr_ms, 0, size-1);
                 t2 = Clock::now();
                 time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 file << time_ms << ",";
+                if (!checkIfSorted<int>(arr_ms, size)) {
+                    std::cout<<"Mergesort Bad!!";
+                    return 3;
+                }
                 delete[] arr_ms;
 
-                int* arr_is = copySingleArray<int>(arr_qs, sizes[i]);
+                int* arr_is = copySingleArray<int>(array, size);
                 t1 = Clock::now();
-                introsort.introsort(arr_is, 0, sizes[i]-1);
+                introsort.introsort(arr_is, 0, size-1);
                 t2 = Clock::now();
                 time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 file << time_ms << ",";
+                if (!checkIfSorted<int>(arr_is, size)) {
+                    std::cout<<"Introsort Bad!!";
+                    return 3;
+                }
                 delete[] arr_is;
-                delete[] arr_qs;
+                delete[] array;
 
                 file << quicksort.operations() << ",";
                 quicksort.reset();
@@ -162,8 +185,6 @@ int main() {
                 file << introsort.operations() << "\n";
                 introsort.reset();
             }
-
-            // delete[] arrays;
         }
     }
 

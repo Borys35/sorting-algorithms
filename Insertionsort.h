@@ -17,7 +17,7 @@ public:
 
 template<class T>
 void Insertionsort<T>::insertionsort(T arr[], int low, int high) {
-    for (int i = low + 1; i < high; i++) {
+    for (int i = low + 1; i <= high; i++) {
         T key = arr[i];
         int j = i - 1;
 
@@ -27,8 +27,8 @@ void Insertionsort<T>::insertionsort(T arr[], int low, int high) {
             arr[j + 1] = arr[j];
             j = j - 1;
         }
-        // ++this->swaps;
         arr[j + 1] = key;
+        ++this->swaps;
     }
 }
 

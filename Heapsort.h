@@ -18,16 +18,20 @@ private:
 };
 
 template<class T>
-void Heapsort<T>::heapify(T arr[], int n, int i) {
-    int largest = i;
+void Heapsort<T>::heapify(T* arr, int n, int i) {
+    int largest = 0;
     int l = 2 * i + 1;
     int r = 2 * i + 2;
 
-    this->comparisons += 2;
-    if (l < n && arr[l] > arr[largest]) {
+    if (l < n && arr[l] > arr[i]) {
+        ++this->comparisons;
         largest = l;
+    } else {
+        ++this->comparisons;
+        largest = i;
     }
     if (r < n && arr[r] > arr[largest]) {
+        ++this->comparisons;
         largest = r;
     }
 
@@ -38,13 +42,16 @@ void Heapsort<T>::heapify(T arr[], int n, int i) {
 }
 
 template<class T>
-void Heapsort<T>::heapsort(T arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--) {
+void Heapsort<T>::heapsort(T* arr, int n) {
+    int size = n;
+
+    for (int i = (size - 1) / 2; i >= 0; --i) {
         heapify(arr, n, i);
     }
 
-    for (int i = n - 1; i > 0; i--) {
+    for (int i = n - 1; i > 0; --i) {
         this->swap(arr[0], arr[i]);
-        heapify(arr, i, 0);
+        --size;
+        heapify(arr, size, 0);
     }
 }

@@ -10,79 +10,48 @@
 template<class T>
 class SortAlgorithm {
 public:
-    long long operations();
-    void reset();
+    virtual long long operations() { return comparisons + swaps; };
+    virtual void reset() {
+        comparisons = 0;
+        swaps = 0;
+    };
+    virtual ~SortAlgorithm() = default;
 protected:
-    void swap(T &a, T &b);
+    void swap(T &a, T &b) noexcept;
     int partition(T arr[], int low, int high);
     long long comparisons = 0;
     long long swaps = 0;
-private:
-    T median(T a, T b, T c);
 };
 
-template <class T>
-T SortAlgorithm<T>::median(T a, T b, T c) {
-    if ((a > b) ^ (a > c)) return a;
-    else if ((b < a) ^ (b < c)) return b;
-    else return c;
-}
 
 template<class T>
-long long SortAlgorithm<T>::operations() {
-    return comparisons + swaps;
-}
-
-template<class T>
-void SortAlgorithm<T>::reset() {
-    comparisons = 0;
-    swaps = 0;
-}
-
-
-template<class T>
-void SortAlgorithm<T>::swap(T &a, T &b) {
+void SortAlgorithm<T>::swap(T &a, T &b) noexcept {
     ++this->swaps;
     T temp = a;
     a = b;
     b = temp;
 }
 
-// template<class T>
-// int SortAlgorithm<T>::partition(T arr[], int low, int high) {
-//     T pivot = arr[(low + high) / 2];
-//     int l = low, r = high;
-//
-//     while (true) {
-//         while (arr[l] < pivot) l++;
-//         while (arr[r] > pivot) r--;
-//         if (l >= r)
-//             return r;
-//
-//         swap(arr[l], arr[r]);
-//
-//         l++;
-//         r--;
-//     }
-// }
-
+// Hoare's partitioning
 template<class T>
 int SortAlgorithm<T>::partition(T arr[], int low, int high) {
-    //T pivot = arr[(low + high) / 2];
-    T pivot = arr[high];
-    //T pivot = arr[rand()%(high-low + 1) + low];
-    //T pivot = median(arr[low], arr[low + (high - low)/2], arr[high]);
-    int temp = low - 1;
+    T pivot = arr[(low + high) / 2];
+    int i = low - 1, j = high + 1;
 
-    for (int i = low; i < high; i++) {
-        ++this->comparisons;
-        if (arr[i] < pivot) {
-            temp++;
-            swap(arr[i], arr[temp]);
+    while (true) {
+        do {
+            i++;
+            ++this->comparisons;
+        } while (arr[i] < pivot);
 
-        }
+        do {
+            j--;
+            ++this->comparisons;
+        } while (arr[j] > pivot);
+
+        if (i >= j)
+            return j;
+
+        swap(arr[i], arr[j]);
     }
-
-    swap(arr[high], arr[temp + 1]);
-    return temp + 1;
 }

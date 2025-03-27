@@ -18,6 +18,7 @@ private:
     void merge(T a[], int low, int mid, int high);
 };
 
+// Rozbijamy tablice na pojedyncze części
 template<class T>
 void Mergesort<T>::mergesort(T a[], int low, int high) {
     if (low >= high) return;
@@ -27,6 +28,7 @@ void Mergesort<T>::mergesort(T a[], int low, int high) {
     merge(a, low, mid, high);
 }
 
+// łączymy pojedyncze elementy w większe, posortowane tablice
 template<class T>
 void Mergesort<T>::merge(T a[], int low, int mid, int high) {
     int n1 = mid - low + 1, n2 = high - mid;
@@ -36,9 +38,11 @@ void Mergesort<T>::merge(T a[], int low, int mid, int high) {
 
     for (int i = 0; i < n1; i++) {
         left[i] = a[low + i];
+        ++this->swaps;
     }
     for (int i = 0; i < n2; i++) {
         right[i] = a[mid + 1 + i];
+        ++this->swaps;
     }
 
     int i = 0, j = 0, k = low;
@@ -47,12 +51,11 @@ void Mergesort<T>::merge(T a[], int low, int mid, int high) {
         if (left[i] <= right[j]) {
             a[k] = left[i];
             i++;
-            ++this->swaps;
         } else {
             a[k] = right[j];
             j++;
-            ++this->swaps;
         }
+        ++this->swaps;
         k++;
     }
 

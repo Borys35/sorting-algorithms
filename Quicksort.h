@@ -15,24 +15,10 @@ public:
 
 template<class T>
 void Quicksort<T>::quicksort(T arr[], int low, int high) {
-    // if (low >= high || low < 0) return;
-    //
-    // int pivot = this->partition(arr, low, high);
-
-    //if (low < pivot - 1)
-        //quicksort(arr, low, pivot - 1);
-    //if (pivot + 1 < high)
-        //quicksort(arr, pivot + 1, high);
-
-    while (low < high) {
+    if (low < high) {
         int pivot = this->partition(arr, low, high);
-        if (pivot - low < high - pivot) {
-            quicksort(arr, low, pivot - 1);
-            low = pivot + 1;
-        } else {
-            quicksort(arr, pivot + 1, high);
-            high = pivot - 1;
-        }
+        quicksort(arr, low, pivot);
+        quicksort(arr, pivot + 1, high);
     }
 }
 
