@@ -5,8 +5,6 @@
 #ifndef QUICKSORT_H
 #define QUICKSORT_H
 
-//https://en.wikipedia.org/wiki/Quicksort
-
 template<class T>
 class Quicksort : public SortAlgorithm<T> {
 public:

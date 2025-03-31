@@ -7,9 +7,6 @@
 
 #endif //MERGESORT_H
 
-//https://www.geeksforgeeks.org/merge-sort/
-//https://en.wikipedia.org/wiki/Merge_sort
-
 template<class T>
 class Mergesort : public SortAlgorithm<T> {
 public:

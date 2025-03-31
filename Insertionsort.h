@@ -7,8 +7,6 @@
 
 #endif //INSERTIONSORT_H
 
-// https://www.geeksforgeeks.org/insertion-sort-algorithm/
-
 template<class T>
 class Insertionsort : public SortAlgorithm<T> {
 public:

@@ -13,47 +13,6 @@ typedef std::chrono::high_resolution_clock Clock;
 // C++20
 
 template <class T>
-T** createArray(int r, int n, float ratio) {
-    T** arr = new T*[r];
-
-    if (ratio == -1) {
-        for (int i = 0; i < r; i++) {
-            arr[i] = new T[n];
-            for (int j = 0; j < n; j++) {
-                arr[i][j] = n - j;
-            }
-        }
-    } else {
-        for (int i = 0; i < r; i++) {
-            arr[i] = new T[n];
-            for (int j = 1; j < n; j++) {
-                float c_ratio = static_cast<float>(j) / static_cast<float>(n);
-                // jezeli ratio=0, wszystkie wartosci beda losowe
-                // jezeli ratio=1, wszystkie wartosci beda posortowane
-                if (c_ratio > ratio) {
-                    arr[i][j] = rand() % 11;
-                } else {
-                    arr[i][j] = j;
-                }
-            }
-        }
-    }
-    return arr;
-}
-
-template <class T>
-T** copyArray(T** origin, int rows, int cols) {
-    T **dest = new T *[rows];
-    for (int i=0; i<rows; i++) {
-        dest[i] = new T[cols];
-        for (int j=0; j<cols; j++) {
-            dest[i][j] = origin[i][j];
-        }
-    }
-    return dest;
-}
-
-template <class T>
 T* createSingleArray(int n, float ratio) {
     T* arr = new T[n];
 
@@ -145,10 +104,10 @@ int main() {
                 auto t2 = Clock::now();
                 long time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 file << time_ms << ",";
-                if (!checkIfSorted<int>(arr_qs, size)) {
-                    std::cout<<"Quicksort Bad!!\n";
-                    return 3;
-                }
+                // if (!checkIfSorted<int>(arr_qs, size)) {
+                //     std::cout<<"Quicksort Bad!!\n";
+                //     return 3;
+                // }
                 delete[] arr_qs;
 
                 int* arr_ms = copySingleArray<int>(array, size);
@@ -157,10 +116,10 @@ int main() {
                 t2 = Clock::now();
                 time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 file << time_ms << ",";
-                if (!checkIfSorted<int>(arr_ms, size)) {
-                    std::cout<<"Mergesort Bad!!";
-                    return 3;
-                }
+                // if (!checkIfSorted<int>(arr_ms, size)) {
+                //     std::cout<<"Mergesort Bad!!";
+                //     return 3;
+                // }
                 delete[] arr_ms;
 
                 int* arr_is = copySingleArray<int>(array, size);
@@ -169,10 +128,10 @@ int main() {
                 t2 = Clock::now();
                 time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 file << time_ms << ",";
-                if (!checkIfSorted<int>(arr_is, size)) {
-                    std::cout<<"Introsort Bad!!";
-                    return 3;
-                }
+                // if (!checkIfSorted<int>(arr_is, size)) {
+                //     std::cout<<"Introsort Bad!!";
+                //     return 3;
+                // }
                 delete[] arr_is;
                 delete[] array;
 

@@ -7,8 +7,6 @@
 
 #endif //HEAPSORT_H
 
-// https://www.geeksforgeeks.org/heap-sort/
-
 template<class T>
 class Heapsort : public SortAlgorithm<T> {
 public:
