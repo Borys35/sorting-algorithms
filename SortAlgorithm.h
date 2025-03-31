@@ -35,7 +35,7 @@ void SortAlgorithm<T>::swap(T &a, T &b) noexcept {
 // Hoare's partitioning
 template<class T>
 int SortAlgorithm<T>::partition(T arr[], int low, int high) {
-    T pivot = arr[(low + high) / 2];
+    T pivot = arr[(low + high) / 2]; // middle element
     int i = low - 1, j = high + 1;
 
     while (true) {

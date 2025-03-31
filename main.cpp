@@ -134,7 +134,7 @@ int main() {
             float ratio = ratios[j];
             std::cout<<"Sorting array [size=" << size << ", ratio=" << ratio << "]"<<std::endl;
 
-            for (int k = 0; k < 2; k++) {
+            for (int k = 0; k < 100; k++) {
 
                 file << k + 1 << "," << size << "," << ratio << ",";
 
