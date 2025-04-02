@@ -21,8 +21,9 @@ void Insertionsort<T>::insertionsort(T arr[], int low, int high) {
 
         while (j >= low && arr[j] > key) {
             ++this->comparisons;
-            ++this->swaps;
-            arr[j + 1] = arr[j];
+            // ++this->swaps;
+            this->swap(arr[j + 1], arr[j]);
+            // arr[j + 1] = arr[j];
             j = j - 1;
         }
         arr[j + 1] = key;
